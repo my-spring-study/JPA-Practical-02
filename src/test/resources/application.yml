@@ -1,0 +1,20 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+  h2:
+    console:
+      enabled: true
+
+logging:
+  level:
+    org:
+      hibernate:
+        SQL: debug
+        type.descriptor.sql.BasicBinder: TRACE
+      springframework:
+        web: info
