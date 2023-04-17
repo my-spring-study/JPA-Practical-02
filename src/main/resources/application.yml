@@ -1,15 +1,14 @@
 spring:
   datasource:
-    url: jdbc:h2:tcp://localhost/~/db/jpa-practical01 # jdbc:h2:tcp://localhost/ 안 붙이면 "Access to DialectResolutionInfo cannot be null" 에러 발생
+    url: jdbc:h2:tcp://localhost/~/database/jpa-pr-02 # jdbc:h2:tcp://localhost/ 안 붙이면 "Access to DialectResolutionInfo cannot be null" 에러 발생
     username: sa
     password: 1234
     driver-class-name: org.h2.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     properties:
       hibernate:
-        #        show_sql: true # System.out.print()
         format_sql: true
   h2:
     console:
@@ -26,8 +25,3 @@ logging:
         type.descriptor.sql.BasicBinder: TRACE
       springframework:
         web: info
-
-#logging:
-#  level:
-#    org.hibernate.sql: debug # logger
-#    org.hibernate.type: trace # 파라미터 확인
