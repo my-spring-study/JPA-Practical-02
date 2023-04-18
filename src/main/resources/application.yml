@@ -25,3 +25,8 @@ logging:
         type.descriptor.sql.BasicBinder: TRACE
       springframework:
         web: info
+
+decorator:
+  datasource:
+    p6spy:
+      enable-logging: true
