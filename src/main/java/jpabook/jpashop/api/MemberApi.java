@@ -1,7 +1,10 @@
 package jpabook.jpashop.api;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -20,6 +23,38 @@ import lombok.RequiredArgsConstructor;
 public class MemberApi {
 
 	private final MemberService memberService;
+
+	// 엔티티를 직접 노출하는 것의 문제점
+	// - 회원정보만 내리고 싶은데 주문 정보까지 함께 내려진다.
+	// - @JsonIgnore를 엔티티에 사용하여 주문 정보를 제외할 수 있지만, 여러 API에서 요구사항이 다르므로 모두 대응할 수 없다.
+	// - ⭐️ @JsonIgnore를 사용하면 엔티티가 프레젠테이션을 위한 로직이 들어가게 된다!
+	@GetMapping("/api/v1/members")
+	public List<Member> membersV1() {
+		return memberService.findMembers();
+	}
+
+	@GetMapping("/api/v2/members")
+	public Result memberV2() {
+		List<Member> findMembers = memberService.findMembers();
+		List<MemberDto> collect = findMembers.stream()
+			.map(member -> new MemberDto(member.getName()))
+			.toList();
+
+		return new Result(collect.size(), collect);
+	}
+
+	@Data
+	@AllArgsConstructor
+	private static class Result<T> {
+		private int count;
+		private T data;
+	}
+
+	@Data
+	@AllArgsConstructor
+	private static class MemberDto {
+		private String name;
+	}
 
 	// V1: 엔티티를 Request Body에 직접 매핑
 	// - 프레젠테이션 레이어의 검증 로직이 엔티티까지 침범한다(@NotEmpty 등).
