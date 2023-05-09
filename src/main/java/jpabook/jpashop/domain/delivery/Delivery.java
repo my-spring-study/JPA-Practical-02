@@ -9,10 +9,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jpabook.jpashop.domain.order.Order;
 import jpabook.jpashop.domain.type.Address;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
@@ -26,6 +27,7 @@ public class Delivery {
 	private Long id;
 
 	@OneToOne(mappedBy = "delivery")
+	@JsonIgnore
 	private Order order;
 
 	@Embedded
