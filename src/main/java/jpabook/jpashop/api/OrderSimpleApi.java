@@ -11,6 +11,8 @@ import jpabook.jpashop.domain.order.OrderStatus;
 import jpabook.jpashop.domain.type.Address;
 import jpabook.jpashop.repository.OrderRepository;
 import jpabook.jpashop.repository.OrderSearch;
+import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryDto;
+import jpabook.jpashop.repository.order.simplequery.OrderSimpleQueryRepository;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class OrderSimpleApi {
 
 	private final OrderRepository orderRepository;
+	private final OrderSimpleQueryRepository orderSimpleQueryRepository;
 
 	// Order -> Member -> Order -> Member ... 무한루프
 	// 양방향 중 한 곳은 @JsonIgnore
@@ -65,6 +68,12 @@ public class OrderSimpleApi {
 			.toList();
 
 		return result;
+	}
+
+	@GetMapping("/api/v4/simple-orders")
+	public List<OrderSimpleQueryDto> ordersV4() {
+		// 필요한 컬럼만 퍼올린다.
+		return orderSimpleQueryRepository.findOrderDtos();
 	}
 
 	@Data
