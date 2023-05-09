@@ -122,4 +122,16 @@ public class OrderRepository {
 					" join fetch o.delivery d", Order.class)
 			.getResultList();
 	}
+
+	public List<Order> findAllWithItem() {
+		// distinct를 사용할 때 실제 DB에서는 완전히 같은 row여야만 적용되지만,
+		// JPA경우 같은 id에 대해 엔티티 하나만 유지
+		return em.createQuery("""
+				select distinct o from Order o
+				join fetch o.member m
+				join fetch o.delivery d
+				join fetch o.orderItems oi
+				join fetch oi.item i""", Order.class)
+			.getResultList();
+	}
 }
