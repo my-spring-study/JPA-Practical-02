@@ -124,14 +124,34 @@ public class OrderRepository {
 	}
 
 	public List<Order> findAllWithItem() {
-		// distinct를 사용할 때 실제 DB에서는 완전히 같은 row여야만 적용되지만,
-		// JPA경우 같은 id에 대해 엔티티 하나만 유지
+		/*
+			JPQL에서 DISTINCT 키워드 사용하기
+
+			distinct를 사용할 때 실제 DB에서는 완전히 같은 row여야만 적용되지만,
+			JPA경우 같은 id에 대해 엔티티 하나만 유지
+		 */
+
+		/*
+			컬렉션 페치조인에서는 페이징이 불가능하다. (현재 Order 기준 OrderItem에 대하여 1:N 페치조인)
+			Order를 기준으로 페이징 하고 싶은데, 다(N)인 OrderItem을 조인하여 OrderItem이 기준이 되기 때문(데이터 뻥튀기)
+
+			컬렉션 페치조인으로 페이징할 경우 아래와 같은 경고 문구를 띄운다.
+			👉 WARN 42818 --- [nio-8080-exec-1] o.h.h.internal.ast.QueryTranslatorImpl   : HHH000104: firstResult/maxResults specified with collection fetch; applying in memory!
+			👉 이 경우 하이버네이트는 경고 로그를 남기고 모든 DB 데이터를 읽어서 메모리에서 페이징을 시도한다. 최악의 경우 장애로 이어질 수 있다.
+		 */
+
+		/*
+			(참고) 컬렉션 페치 조인은 1개만 할 수 있다.
+			👉 컬렉션 둘 이상에 대해 페치조인 하면 안 된다. 데이터가 부정확하게 조회될 수 있다.
+		 */
 		return em.createQuery("""
 				select distinct o from Order o
 				join fetch o.member m
 				join fetch o.delivery d
 				join fetch o.orderItems oi
 				join fetch oi.item i""", Order.class)
+			.setFirstResult(1)
+			.setMaxResults(100)
 			.getResultList();
 	}
 }
