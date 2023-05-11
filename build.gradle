@@ -27,7 +27,8 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-devtools'
 
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0' // 운영할 때는 성능테스트 해보고 사용하는 것 권장
+	// p6spy 1.7.1 로 사용! (1.9.0 정상 동작 안 함)
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.7.1' // 운영할 때는 성능테스트 해보고 사용하는 것 권장한다.
 
 	compileOnly 'org.projectlombok:lombok'
 

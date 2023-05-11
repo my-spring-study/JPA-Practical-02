@@ -19,6 +19,8 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.BatchSize;
+
 import jpabook.jpashop.domain.delivery.Delivery;
 import jpabook.jpashop.domain.delivery.DeliveryStatus;
 import jpabook.jpashop.domain.member.Member;
@@ -43,6 +45,12 @@ public class Order {
 	@JoinColumn(name = "member_id")
 	private Member member;
 
+	/**
+	 * @BatchSize 를 필드위에 작성할 때,
+	 * 👉 XXXToMany 관게에서는 필드 레벨에 작성한다.
+	 * 👉 XXXToOne 관계는 클래스 레벨에 작성한다.
+	 */
+	@BatchSize(size = 1000)
 	/**
 	 * OrderItem과 Delivery는 Order 가 private owner 이므로 cascade 옵션을 사용했다.
 	 * 즉, Order만 OrderItem과 Delivery를 참조 & persist 라이프 사이클이 같기 때문에 cascade를 사용한 것이다.

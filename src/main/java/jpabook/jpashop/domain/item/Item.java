@@ -12,10 +12,13 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToMany;
 
+import org.hibernate.annotations.BatchSize;
+
 import jpabook.jpashop.exception.NotEnoughStockException;
 import lombok.Getter;
 import lombok.Setter;
 
+@BatchSize(size = 1000) // XXXToOne: OrderItem(Many) To Item(One) 관계에서는 @BatchSize를 클래스 레벨에 작성한다.
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "dtype")

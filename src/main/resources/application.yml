@@ -4,15 +4,24 @@ spring:
     username: sa
     password: 1234
     driver-class-name: org.h2.Driver
+
   jpa:
     hibernate:
       ddl-auto: create
     properties:
       hibernate:
         format_sql: true
+        # Batch Size 를 이용한 LAZY 로딩 👉 IN 쿼리로 변경
+        # 100의 의미: IN 쿼리 개수를 몇 개로 할 것인가. (한 번에 데이터를 몇 개 퍼올릴 것인가)
+        # size 가 1인 경우, 데이터가 2개면 IN 쿼리가 2번 나간다.
+        # size 가 10 인 경우, 데이터가 100개면 IN 쿼리가 10번 나간다.
+        # 👉 @BatchSize 는 상황에 따르게 다르기 때문에 크 의미없다고 생각하고 yml에 BatchSize를 지정하는 것을 선호한다.
+        default_batch_fetch_size: 100 # 👉 글로벌하게 적용된다. 디테일하게 적용하고 싶으면 @BatchSize 를 사용한다.
+
   h2:
     console:
       enabled: true
+
   output:
     ansi:
       enabled: always
@@ -22,7 +31,7 @@ logging:
     org:
       hibernate:
         SQL: debug
-        type.descriptor.sql.BasicBinder: TRACE
+      #        type.descriptor.sql.BasicBinder: TRACE
       springframework:
         web: info
 

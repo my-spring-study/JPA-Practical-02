@@ -33,7 +33,7 @@ public class Member {
 	private Address address;
 
 	@JsonIgnore
-	@OneToMany(mappedBy = "member")
+	@OneToMany(mappedBy = "member") // TODO: 멤버를 조회할 때는 Orders 도 Batch Size에 의해 IN Query 가 나갈 것인가?
 	private List<Order> orders = new ArrayList<>();
 
 	public Member() {
